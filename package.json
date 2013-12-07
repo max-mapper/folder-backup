@@ -1,7 +1,7 @@
 {
   "name": "folder-backup",
   "version": "0.0.1",
-  "description": "",
+  "description": "Easily pack and extract folders as tarballs, for web servers or local filesystem usage.",
   "main": "index.js",
   "author": "max ogden",
   "license": "BSD-2-Clause",
@@ -12,5 +12,13 @@
     "dir-tar-stream": "~0.1.2",
     "tar": "~0.1.18",
     "request": "~2.27.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maxogden/folder-backup.git"
+  },
+  "bugs": {
+    "url": "https://github.com/maxogden/folder-backup/issues"
+  },
+  "homepage": "https://github.com/maxogden/folder-backup"
 }
