@@ -1,0 +1,16 @@
+{
+  "name": "folder-backup",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "author": "max ogden",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "extend": "~1.2.1",
+    "progress": "~1.1.2",
+    "rimraf": "~2.2.4",
+    "dir-tar-stream": "~0.1.2",
+    "tar": "~0.1.18",
+    "request": "~2.27.0"
+  }
+}
