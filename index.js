@@ -1,7 +1,6 @@
 var fs = require('fs')
 var path = require('path')
-var dirtar = require('dir-tar-stream')
-var tar = require('tar')
+var tar = require('tar-fs')
 var rimraf = require('rimraf')
 var ProgressBar = require('progress')
 var extend = require('extend')
@@ -10,8 +9,8 @@ var zlib = require('zlib')
 
 function noop(){}
 
-module.exports.pack = dirtar
-module.exports.unpack = unpack
+module.exports.pack = tar.pack
+module.exports.unpack = tar.extract
 module.exports.serve = serve
 module.exports.clone = clone
 
@@ -33,7 +32,10 @@ function clone(remote, options, cb) {
   
   var targz = request(remote)
   var gunzip = zlib.createGunzip()
-  var unpackStream = unpack(options.path, cb)
+    
+  var unpackStream = tar.extract(options.path)
+  
+  unpackStream.on('finish', cb)
   
   targz.pipe(gunzip).pipe(unpackStream)
   
@@ -49,41 +51,17 @@ function clone(remote, options, cb) {
     })
     
     unpackStream.on('entry', function(entry) {
-      if (entry.type === 'File') bar.tick()
+      if (entry.type === 'file') bar.tick()
     })
   }
   
   return unpackStream
 }
 
-function unpack(target, cb) {
-  if (typeof target === 'function') {
-    cb = target
-    target = undefined
-  }
-  if (!cb) cb = noop
-  if (!target) target = process.cwd()
-    
-  var untarStream = tar.Extract({ path: target, strip: 1 })
-  var untarError = false
-    
-  untarStream.on('error', function(e) {
-    untarError = true
-    cb(e)
-  })
-  
-  untarStream.on('end', function() {
-    if (untarError) return
-    cb()
-  })
-  
-  return untarStream
-}
-
 function serve(dir, httpResponse, cb) {
   fs.readdir(dir, function(err, files) {
     if (err) return cb(err)
-    var packStream = dirtar(dir)
+    var packStream = tar.pack(dir)
     packStream.on('error', function() {
       if (err) {
         httpResponse.statusCode = 500
@@ -91,7 +69,8 @@ function serve(dir, httpResponse, cb) {
       }      
     })
     httpResponse.setHeader('x-file-count', files.length)
-    packStream.pipe(httpResponse)
+    var gzip = zlib.createGzip()
+    packStream.pipe(gzip).pipe(httpResponse)
     if (cb) httpResponse.on('end', cb)
   })
 }

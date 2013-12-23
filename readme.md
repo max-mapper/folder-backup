@@ -16,9 +16,9 @@ makes HTTP request to `remoteURL` (which should be `fbackup.serve` and/or the .t
 
 you can also specify `options.showProgress` as either `true` or `false` (default is `false`) if you want to print progress messages to stdout
 
-### `fbackup.unpack(target, cb)`
+### `fbackup.unpack`
 
-returns a writable stream that ungzips and unpacks data into `target`. calls optional `cb` when done with `(err)`
+the `extract` method exposed from the internal instance of the `tar-fs` module
 
 ### `fbackup.serve(dir, httpResponse, [cb])`
 
@@ -26,7 +26,7 @@ function for mounting this module in an http API. streams `fbackup.pack` of `dir
 
 ### `fbackup.pack`
 
-an instance of the `dir-tar-stream` module
+the `pack` method exposed from the internal instance of the `tar-fs` module
 
 ## license
 

@@ -1,6 +1,6 @@
 {
   "name": "folder-backup",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Easily pack and extract folders as tarballs, for web servers or local filesystem usage.",
   "main": "index.js",
   "author": "max ogden",
@@ -9,8 +9,7 @@
     "extend": "~1.2.1",
     "progress": "~1.1.2",
     "rimraf": "~2.2.4",
-    "dir-tar-stream": "~0.1.2",
-    "tar": "~0.1.18",
+    "tar-fs": "~0.1.4",
     "request": "~2.27.0"
   },
   "repository": {
