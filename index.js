@@ -1,7 +1,6 @@
 var fs = require('fs')
 var path = require('path')
 var tar = require('tar-fs')
-var rimraf = require('rimraf')
 var ProgressBar = require('progress')
 var extend = require('extend')
 var request = require('request')
