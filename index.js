@@ -1,10 +1,10 @@
 var fs = require('fs')
 var path = require('path')
 var tar = require('tar-fs')
-var ProgressBar = require('progress')
 var extend = require('extend')
 var request = require('request')
 var zlib = require('zlib')
+var progress = require('progress-stream')
 
 function noop(){}
 
@@ -31,28 +31,24 @@ function clone(remote, options, cb) {
   
   var targz = request(remote)
   var gunzip = zlib.createGunzip()
-    
+  var progStream = progress({
+    time: 1000
+  })
+  
   var unpackStream = tar.extract(options.path)
+  
+  progStream.on('progress', function(meta) {
+    unpackStream.emit('progress', meta)
+  })
   
   unpackStream.on('finish', cb)
   
-  targz.pipe(gunzip).pipe(unpackStream)
+  targz.pipe(progStream).pipe(gunzip).pipe(unpackStream)
   
-  if (options.showProgress) {
-    var bar
-    
-    targz.on('response', function(r) {
-      var pending = +r.headers['x-file-count']
-      bar = new ProgressBar('  [:bar] :elapseds elapsed, eta :etas', {
-        width: 20,
-        total: pending
-      })
-    })
-    
-    unpackStream.on('entry', function(entry) {
-      if (entry.type === 'file') bar.tick()
-    })
-  }
+  targz.on('response', function(r) {
+    var pending = +r.headers['x-file-count']
+    unpackStream.emit('file-count', pending)
+  })
   
   return unpackStream
 }

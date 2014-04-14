@@ -1,15 +1,15 @@
 {
   "name": "folder-backup",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Easily pack and extract folders as tarballs, for web servers or local filesystem usage.",
   "main": "index.js",
   "author": "max ogden",
   "license": "BSD-2-Clause",
   "dependencies": {
     "extend": "~1.2.1",
-    "progress": "~1.1.2",
-    "tar-fs": "~0.3.2",
-    "request": "~2.27.0"
+    "progress-stream": "^0.4.0",
+    "request": "~2.27.0",
+    "tar-fs": "~0.3.2"
   },
   "scripts": {
     "test": "node test/test.js"
