@@ -6,9 +6,10 @@ var fs = require('fs')
 var fbackup = require('../')
 
 test('basic', function(t) {
+  t.plan(3);
   var target = path.join(__dirname, 'target')
   rimraf(target, function(err) {
-    var server = serve()
+    var server = serve(t)
     server.listen(8080, function(err) {
       if (err) throw err
       fbackup.clone('http://localhost:8080', { path: target }, function(err) {
@@ -24,8 +25,10 @@ test('basic', function(t) {
   })
 })
 
-function serve() {
+function serve(t) {
   return http.createServer(function(req, res) {
-    fbackup.serve(__dirname, res, function(err) {})
+    fbackup.serve(__dirname, res, function(err) {
+      t.notOk(err, 'no serve error')
+    })
   })
 }
