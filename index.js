@@ -66,6 +66,6 @@ function serve(dir, httpResponse, cb) {
     httpResponse.setHeader('x-file-count', files.length)
     var gzip = zlib.createGzip()
     packStream.pipe(gzip).pipe(httpResponse)
-    if (cb) httpResponse.on('end', cb)
+    if (cb) httpResponse.on('finish', cb)
   })
 }
